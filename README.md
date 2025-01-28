@@ -5,6 +5,6 @@ Create 1 micro project by day.
 Day 1 - 27.01. REST API.
 Day 2 - 28.01. Notes app.
 Day 3 - 29.01. Authentication system.
-Day 4 - 30.01. User Management Application.
+Day 4 - 30.01. App for votes.
 Day 5 - 31.01. File storage app.
 
