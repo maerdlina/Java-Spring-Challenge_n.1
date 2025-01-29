@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Notes</h1>
+    <textarea id="noteInput" placeholder="Write your note here..."></textarea>
+    <button id="saveNote">Save Note</button>
+    <button id="deleteAllNotes">Delete All Notes</button>
+    <div id="notesList"></div>
+</div>
+
+<script>
+    const apiUrl = 'http://localhost:4000/api/notes'; // Update with your backend API URL
+
+    document.getElementById('saveNote').addEventListener('click', async function() {
+        const noteInput = document.getElementById('noteInput');
+        const noteText = noteInput.value;
+
+        if (noteText) {
+            const note = {
+                name: noteText,
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(note)
+                });
+
+                if (response.ok) {
+                    noteInput.value = ''; // Clear the input
+                    fetchNotes(); // Refresh the notes list
+                } else {
+                    console.error('Failed to save note');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    });
+
+    async function fetchNotes() {
+        try {
+            const response = await fetch(apiUrl);
+            const notes = await response.json();
+
+            const notesList = document.getElementById('notesList');
+            notesList.innerHTML = ''; // Clear existing notes
+
+            notes.forEach(note => {
+                const dateTime = new Date().toLocaleString();
+                const noteItem = document.createElement('div');
+                noteItem.classList.add('note-item');
+                noteItem.innerHTML = `<strong>${dateTime}</strong>: ${note.name}`;
+                notesList.appendChild(noteItem);
+            });
+        } catch (error) {
+            console.error('Error fetching notes:', error);
+        }
+    }
+
+    document.getElementById('deleteAllNotes').addEventListener('click', async function() {
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                fetchNotes(); // Refresh the notes list
+            } else {
+                console.error('Failed to delete notes');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    // Fetch notes on page load
+    fetchNotes();
+</script>
+</body>
+</html>
