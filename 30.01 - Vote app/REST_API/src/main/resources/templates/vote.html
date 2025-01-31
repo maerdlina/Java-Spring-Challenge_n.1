@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Голосование</title>
+</head>
+<body>
+<h1>Голосование за изображения</h1>
+
+<div th:if="${errorMessage}">
+    <p style="color: red;" th:text="${errorMessage}"></p>
+</div>
+
+<div th:if="${image1 != null}">
+    <img th:src="@{${image1.path}}" alt="Изображение 1" style="width: 200px;" />
+    <form action="/api/vote" method="post">
+        <input type="hidden" name="voteCard" value="1" />
+        <button type="submit">Голосовать за изображение 1</button>
+    </form>
+</div>
+
+<div th:if="${image2 != null}">
+    <img th:src="@{${image2.path}}" alt="Изображение 2" style="width: 200px;" />
+    <form action="/api/vote" method="post">
+        <input type="hidden" name="voteCard" value="2" />
+        <button type="submit">Голосовать за изображение 2</button>
+    </form>
+</div>
+
+<form action="/api/vote/reset" method="post">
+    <button type="submit">Сбросить голосование</button>
+</form>
+</body>
+</html>

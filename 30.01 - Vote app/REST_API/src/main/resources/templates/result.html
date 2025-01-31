@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Результаты голосования</title>
+</head>
+<body>
+<h1>Лучшее изображение</h1>
+<div th:if="${bestImage != null}">
+    <img th:src="@{${bestImage.path}}" alt="Лучшее изображение" style="width: 200px;" />
+    <p>Рейтинг: <span th:text="${ratings[bestImage]}"></span></p>
+</div>
+<div th:if="${bestImage == null}">
+    <p>Не было проголосовано ни одного изображения.</p>
+</div>
+
+<h2>Рейтинги всех изображений</h2>
+<ul>
+    <li th:each="entry : ${ratings}">
+        <span th:text="${entry.key.path}">Изображение</span>: <span th:text="${entry.value}">0</span>
+    </li>
+</ul>
+
+<form action="/api/vote/reset" method="post">
+    <button type="submit">Вернуться к началу голосования</button>
+</form>
+</body>
+</html>
